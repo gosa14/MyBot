@@ -72,11 +72,11 @@
 		$lblminArmyCapacityTHSnipe = GUICtrlCreateLabel(GetTranslated(4,20, "Min Army Capacity % to start Snipe") & ":", $x - 10, $y + 4, 177, -1, $SS_RIGHT)
 			$txtTip = GetTranslated(4,21, "Minimum Army Capacity to start Snipe.")
 			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetState(-1, $GUI_DISABLE)
+			;GUICtrlSetState(-1, $GUI_DISABLE)
 		$txtminArmyCapacityTHSnipe = GUICtrlCreateInput("35", $x + 170, $y, 25, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
 			GUICtrlSetTip(-1, $txtTip)
 			GUICtrlSetLimit(-1, 2)
-			GUICtrlSetState(-1, $GUI_DISABLE)
+			;GUICtrlSetState(-1, $GUI_DISABLE)
 		$y +=27
 		$chkTrophyMode = GUICtrlCreateCheckbox(GetTranslated(4,23, "Snipe Combo"), $x-10, $y, -1, -1)
 			$txtTip = GetTranslated(4,24, "Adds the TH Snipe combination to the current search settings. (Example: Deadbase OR TH Snipe)")
@@ -323,4 +323,6 @@
 		GUICtrlCreateIcon($pIconLib, $eIcnDark, $x + 170, $y, 16, 16)
     GUICtrlCreateGroup("", -99, -99, 1, 1)
 
-GUICtrlCreateTabItem("")
+$grpTabAdvEmpty = GUICtrlCreateGroup("", 0, 0, 1, 1)
+GUICtrlCreateGroup("", -99, -99, 1, 1)
+;GUICtrlCreateTabItem("")
