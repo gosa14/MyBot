@@ -12,7 +12,10 @@
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
 ; Example .......: No
 ; ===============================================================================================================================
-
+;ModBoju
+;#include "ModBoju\MBR Functions_AttackHours.au3"
+#include "ModBoju\MBR Functions_Heros.au3"
+;-->ModBoju
 #include "functions\Config\applyConfig.au3"
 #include "functions\Config\readConfig.au3"
 #include "functions\Config\saveConfig.au3"

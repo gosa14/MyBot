@@ -56,7 +56,11 @@ AtkLogHead()
 #include "GUI\MBR GUI Control Tab Misc.au3"
 #include "GUI\MBR GUI Control Tab Upgrade.au3"
 #include "GUI\MBR GUI Control Tab Notify.au3"
-#include "GUI\MBR GUI Control Tab Expert.au3"
+;#include "GUI\MBR GUI Control Tab Expert.au3"
+;#include "ModBoju\GUI_AttackHours\MBR GUI Control Tab Expert.au3"
+;#include "ModBoju\GUI_AttackHours\MBR GUI Control Tab Scheduler.au3"
+#include "ModBoju\GUI_Heros\MBR GUI Control Tab Expert.au3"
+#include "ModBoju\GUI_Heros\MBR GUI Control Tab Scheduler.au3"
 #include "GUI\MBR GUI Control Tab Stats.au3"
 #include "GUI\MBR GUI Control Collectors.au3"
 

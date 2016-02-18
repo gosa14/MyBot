@@ -43,6 +43,10 @@
 #include <IE.au3>
 #include <Process.au3>
 
+;ModBoju
+;#include "ModBoju\Global Variables_AttackHours.au3"
+#include "ModBoju\Global Variables_Heros.au3"
+;-->ModBoju
 Global Const $DEFAULT_HEIGHT = 780
 Global Const $DEFAULT_WIDTH = 860
 Global Const $midOffsetY = ($DEFAULT_HEIGHT - 720) / 2
