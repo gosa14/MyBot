@@ -80,6 +80,7 @@ Func cmbSearchMode()
 				GUICtrlSetState($i, $GUI_ENABLE)
 			Next
 	EndSwitch
+    HideNotNeed()
 EndFunc   ;==>cmbSearchMode
 
 Func chkDBEnableAfter()
