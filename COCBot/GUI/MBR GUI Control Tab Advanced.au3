@@ -33,6 +33,7 @@ Func chkUnbreakable()
 		GUICtrlSetState($txtUnBrkMaxDark, $GUI_DISABLE)
 		$iUnbreakableMode = 0
 	EndIf
+    HideNotNeed()
 EndFunc   ;==>chkUnbreakable
 
 Func chkAttackNow()
@@ -55,21 +56,22 @@ Func chkSnipeWhileTrain()
 		$iChkSnipeWhileTrain = 1
 		GUICtrlSetState($lblSearchlimit, $GUI_ENABLE)
 		GUICtrlSetState($txtSearchlimit, $GUI_ENABLE)
-		GUICtrlSetState($lblminArmyCapacityTHSnipe, $GUI_ENABLE)
-		GUICtrlSetState($txtminArmyCapacityTHSnipe, $GUI_ENABLE)
+		;GUICtrlSetState($lblminArmyCapacityTHSnipe, $GUI_ENABLE)
+		;GUICtrlSetState($txtminArmyCapacityTHSnipe, $GUI_ENABLE)
 		GUICtrlSetState($lblSWTTiles, $GUI_ENABLE)
 		GUICtrlSetState($txtSWTTiles, $GUI_ENABLE)
 	Else
 		$iChkSnipeWhileTrain = 0
 		GUICtrlSetState($lblSearchlimit, $GUI_DISABLE)
 		GUICtrlSetState($txtSearchlimit, $GUI_DISABLE)
-		GUICtrlSetState($lblminArmyCapacityTHSnipe, $GUI_DISABLE)
-		GUICtrlSetState($txtminArmyCapacityTHSnipe, $GUI_DISABLE)
+		;GUICtrlSetState($lblminArmyCapacityTHSnipe, $GUI_DISABLE)
+		;GUICtrlSetState($txtminArmyCapacityTHSnipe, $GUI_DISABLE)
 		GUICtrlSetState($lblSWTTiles, $GUI_DISABLE)
 		GUICtrlSetState($txtSWTTiles, $GUI_DISABLE)
 	EndIf
 	GUICtrlSetState($ChkSnipeWhileTrain, $GUI_ENABLE)
 
+    HideNotNeed()
 EndFunc   ;==>chkSnipeWhileTrain
 
 #comments-start
@@ -102,6 +104,7 @@ Func chkBullyMode()
 		GUICtrlSetState($radUseDBAttack, $GUI_DISABLE)
 		GUICtrlSetState($radUseLBAttack, $GUI_DISABLE)
 	EndIf
+    HideNotNeed()
 EndFunc   ;==>chkBullyMode
 
 Func chkSnipeMode()
@@ -144,6 +147,7 @@ Func chkSnipeMode()
 		GUICtrlSetState($chkUseHSpellsTH, $GUI_DISABLE)
 		GUICtrlSetState($chkUseLSpellsTH, $GUI_DISABLE)
 	EndIf
+    HideNotNeed()
 EndFunc   ;==>chkSnipeMode
 
 

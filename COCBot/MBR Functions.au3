@@ -12,7 +12,7 @@
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
 ; Example .......: No
 ; ===============================================================================================================================
-
+#include "functions\Config\HideNotNeed.au3"
 #include "functions\Config\applyConfig.au3"
 #include "functions\Config\readConfig.au3"
 #include "functions\Config\saveConfig.au3"
