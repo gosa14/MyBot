@@ -1495,4 +1495,5 @@ Func saveConfig() ;Saves the controls settings to the config
 
 	If $hFile <> -1 Then FileClose($hFile)
 
+Boju_saveConfig()
 EndFunc   ;==>saveConfig

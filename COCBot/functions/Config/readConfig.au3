@@ -15,6 +15,7 @@
 
 
 Func readConfig() ;Reads config and sets it to the variables
+Boju_readConfig()
 	If FileExists($building) Then
 		$TownHallPos[0] = IniRead($building, "other", "xTownHall", "-1")
 		$TownHallPos[1] = IniRead($building, "other", "yTownHall", "-1")

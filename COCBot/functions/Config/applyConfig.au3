@@ -16,6 +16,8 @@
 
 Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the controls in GUI
 
+Boju_applyConfig()
+
 	;General Settings--------------------------------------------------------------------------
 	If $frmBotPosX <> -32000 Then WinMove2($sBotTitle, "", $frmBotPosX, $frmBotPosY)
 

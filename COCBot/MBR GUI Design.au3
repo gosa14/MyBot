@@ -5,7 +5,7 @@
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........: GKevinOD (2014)
-; Modified ......: DkEd, Hervidero (2015)
+; Modified ......: DkEd, Hervidero (2015), Boju (2016)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
@@ -49,6 +49,10 @@ GUICtrlSetOnEvent(-1, "")
 #include "GUI\MBR GUI Design Tab Expert.au3"
 #include "GUI\MBR GUI Design Tab Stats.au3" ; includes '$LastControlToHide" on GUI
 #include "GUI\MBR GUI Design Collectors.au3"
+#include "GUI\MBR GUI Design Tab Scheduler.au3"
+
+;#include "GUI\ImgLoc\MBR GUI Design Tab Test.au3"
+
 ;~ -------------------------------------------------------------
 ;~ About Us Tab
 ;~ -------------------------------------------------------------
