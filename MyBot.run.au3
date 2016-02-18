@@ -147,6 +147,13 @@ WEnd
 Func runBot() ;Bot that runs everything in order
 	$TotalTrainedTroops = 0
 	While 1
+		;ModBoju
+		Local $hour = StringSplit(_NowTime(4), ":", $STR_NOCOUNT)
+		If $hourAttack <> $hour[0] then
+			$hourAttack = $hour[0]
+			;GUICtrlSetData($txthourAttack, $hourAttack)
+		EndIf
+		;-->ModBoju
 		$Restart = False
 		$fullArmy = False
 		$CommandStop = -1
@@ -197,6 +204,8 @@ Func runBot() ;Bot that runs everything in order
 			ReArm()
 				If _Sleep($iDelayRunBot3) Then Return
 				If $Restart = True Then ContinueLoop
+		;ModBoju
+		If ($iPlannedAttackHours[$hourAttack] <> 0 and $iPlannedAttackHoursEnable = 1) or $iPlannedAttackHoursEnable = 0  or $fullArmy1 = False Then 
 			ReplayShare($iShareAttackNow)
 				If _Sleep($iDelayRunBot3) Then Return
 				If $Restart = True Then ContinueLoop
@@ -244,6 +253,7 @@ Func runBot() ;Bot that runs everything in order
 				If _Sleep($iDelayRunBot3) Then Return
 				If $Restart = True Then ContinueLoop
 			Idle()
+				$fullArmy1 = $fullArmy
 				If _Sleep($iDelayRunBot3) Then Return
 				If $Restart = True Then ContinueLoop
 			SaveStatChkTownHall()
@@ -260,6 +270,11 @@ Func runBot() ;Bot that runs everything in order
 				If _Sleep($iDelayRunBot1) Then Return
 				If $Restart = True Then ContinueLoop
 			EndIf
+		Else
+			SetLog("Attacking Not Planned, Skipped.., So Waiting", $COLOR_RED)
+			If _SleepStatus($iDelayWaitAttack) Then Return False
+		EndIf
+		;ModBoju
 
 		Else ;When error occours directly goes to attack
 			If $Is_SearchLimit = True Then
@@ -362,34 +377,41 @@ Func Idle() ;Sequence that runs until Full Army
 EndFunc   ;==>Idle
 
 Func AttackMain() ;Main control for attack functions
-	If $iChkUseCCBalanced = 1 Then ;launch profilereport() only if option balance D/R it's activated
-		ProfileReport()
-		If _Sleep($iDelayAttackMain1) Then Return
-		checkMainScreen(False)
-		If $Restart = True Then Return
+	;ModBoju
+	If ($iPlannedAttackHours[$hourAttack] <> 0 and $iPlannedAttackHoursEnable = 1) or $iPlannedAttackHoursEnable = 0 Then 
+		$fullArmy1 = False
+		If $iChkUseCCBalanced = 1 Then ;launch profilereport() only if option balance D/R it's activated
+			ProfileReport()
+			If _Sleep($iDelayAttackMain1) Then Return
+			checkMainScreen(False)
+			If $Restart = True Then Return
+		EndIf
+		If Number($iTrophyCurrent) > Number($iTxtMaxTrophy) Then ;If current trophy above max trophy, try drop first
+			DropTrophy()
+			$Is_ClientSyncError = False ; reset OOS flag to prevent looping.
+			If _Sleep($iDelayAttackMain1) Then Return
+			Return ; return to runbot, refill armycamps
+		EndIf
+		PrepareSearch()
+			If $OutOfGold = 1 Then Return ; Check flag for enough gold to search
+			If $Restart = True Then Return
+		VillageSearch()
+			If $OutOfGold = 1 Then Return ; Check flag for enough gold to search
+			If $Restart = True Then Return
+		PrepareAttack($iMatchMode)
+			If $Restart = True Then Return
+		;checkDarkElix()
+		;DEAttack()
+		;	If $Restart = True Then Return
+		Attack()
+			If $Restart = True Then Return
+		ReturnHome($TakeLootSnapShot)
+			If _Sleep($iDelayAttackMain2) Then Return
+		Return True
+	Else
+		SetLog("Attacking Not Planned, Skipped..", $COLOR_RED)
 	EndIf
-	If Number($iTrophyCurrent) > Number($iTxtMaxTrophy) Then ;If current trophy above max trophy, try drop first
-		DropTrophy()
-		$Is_ClientSyncError = False ; reset OOS flag to prevent looping.
-		If _Sleep($iDelayAttackMain1) Then Return
-		Return ; return to runbot, refill armycamps
-	EndIf
-	PrepareSearch()
-		If $OutOfGold = 1 Then Return ; Check flag for enough gold to search
-		If $Restart = True Then Return
-	VillageSearch()
-		If $OutOfGold = 1 Then Return ; Check flag for enough gold to search
-		If $Restart = True Then Return
-	PrepareAttack($iMatchMode)
-		If $Restart = True Then Return
-	;checkDarkElix()
-	;DEAttack()
-	;	If $Restart = True Then Return
-	Attack()
-		If $Restart = True Then Return
-	ReturnHome($TakeLootSnapShot)
-		If _Sleep($iDelayAttackMain2) Then Return
-	Return True
+	;ModBoju
 EndFunc   ;==>AttackMain
 
 Func Attack() ;Selects which algorithm

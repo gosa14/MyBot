@@ -12,6 +12,11 @@
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
 ; Example .......: No
 ; ===============================================================================================================================
+;ModBoju
+#include "ModBoju\Boju_applyConfig.au3"
+#include "ModBoju\Boju_readConfig.au3"
+#include "ModBoju\Boju_saveConfig.au3"
+;-->ModBoju
 
 #include "functions\Config\applyConfig.au3"
 #include "functions\Config\readConfig.au3"
