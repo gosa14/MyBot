@@ -120,7 +120,7 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 		Case 5 ;DE Side - Live Base only ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			SetLog("Attacking on Dark Elixir Side.", $COLOR_BLUE)
 			$nbSides = 1
-			If NOT ($iChkRedArea[$iMatchMode]) Then GetBuildingEdge($eSideBuildingDES) ; Get DE Storage side when Redline is not used.
+			If Not ($iChkRedArea[$iMatchMode]) Then GetBuildingEdge($eSideBuildingDES) ; Get DE Storage side when Redline is not used.
 		Case 6 ;TH Side - Live Base only ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			SetLog("Attacking on Town Hall Side.", $COLOR_BLUE)
 			$nbSides = 1
@@ -147,17 +147,17 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 				]
 	ElseIf $nbSides = 5 Then ; Customise Four Finger attack here
 		Local $listInfoDeploy[11][5] = [[$eGiant, $nbSides, 1, 1, 2] _
-			    , [$eBarb, $nbSides, 1, 1, 0] _
-			    , [$eWall, $nbSides, 1, 1, 1] _
-			    , [$eArch, $nbSides, 1, 1, 0] _
-			    , [$eGobl, $nbSides, 1, 2, 0] _
-			    , ["CC", 1, 1, 1, 1] _
-			    , [$eHogs, $nbSides, 1, 1, 1] _
-			    , [$eWiza, $nbSides, 1, 1, 0] _
-			    , [$eMini, $nbSides, 1, 1, 0] _
-			    , [$eGobl, $nbSides, 2, 2, 0] _
-			    , ["HEROES", 1, 2, 1, 1] _
-			    ]
+				, [$eBarb, $nbSides, 1, 1, 0] _
+				, [$eWall, $nbSides, 1, 1, 1] _
+				, [$eArch, $nbSides, 1, 1, 0] _
+				, [$eGobl, $nbSides, 1, 2, 0] _
+				, ["CC", 1, 1, 1, 1] _
+				, [$eHogs, $nbSides, 1, 1, 1] _
+				, [$eWiza, $nbSides, 1, 1, 0] _
+				, [$eMini, $nbSides, 1, 1, 0] _
+				, [$eGobl, $nbSides, 2, 2, 0] _
+				, ["HEROES", 1, 2, 1, 1] _
+				]
 	Else
 		If $debugSetlog = 1 Then SetLog("listdeploy standard for attack", $COLOR_PURPLE)
 		Local $listInfoDeploy[13][5] = [[$eGiant, $nbSides, 1, 1, 2] _
