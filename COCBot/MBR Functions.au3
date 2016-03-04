@@ -252,3 +252,11 @@
 #include "functions\Village\UpgradeHeroes.au3"
 #include "functions\Village\ClanLevel.au3"
 #include "functions\Village\StarBonus.au3"
+
+; SmartZap files added by LunaEclipse
+#include "functions\SmartZap\drillSearch.au3"
+#include "functions\SmartZap\smartZap.au3"
+
+; General files added by LunaEclipse for use with SmartZap
+#include "functions\Attack\unitInfo.au3"
+#include "functions\Attack\dropSpell.au3"

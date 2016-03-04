@@ -5,7 +5,7 @@
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........: GKevinOD (2014)
-; Modified ......: DkEd, Hervidero (2015)
+; Modified ......: DkEd, Hervidero (2015), LunaEclipse(January, 2016)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
@@ -41,6 +41,8 @@ GUICtrlSetOnEvent(-1, "")
 #include "GUI\MBR GUI Design Tab Attack.au3"
 #include "GUI\MBR GUI Design Tab AttackCSV.au3"
 #include "GUI\MBR GUI Design Tab Advanced.au3"
+; SmartZap Tab added by LunaEclipse
+#include "GUI\MBR GUI Design Tab SmartZap.au3"
 #include "GUI\MBR GUI Design Tab EndBattle.au3"
 #include "GUI\MBR GUI Design Tab Donate.au3"
 #include "GUI\MBR GUI Design Tab Misc.au3"

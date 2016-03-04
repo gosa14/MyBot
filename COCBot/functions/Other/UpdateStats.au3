@@ -5,7 +5,7 @@
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........: kaganus (2015-jun-20)
-; Modified ......:
+; Modified ......: LunaEclipse(January, 2016)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
@@ -29,6 +29,7 @@ Global $iOldGoldFromMines, $iOldElixirFromCollectors, $iOldDElixirFromDrills ; n
 Global $iOldAttackedCount, $iOldAttackedVillageCount[$iModeCount+1] ; number of attack villages for DB, LB, TB, TS
 Global $iOldTotalGoldGain[$iModeCount+1], $iOldTotalElixirGain[$iModeCount+1], $iOldTotalDarkGain[$iModeCount+1], $iOldTotalTrophyGain[$iModeCount+1] ; total resource gains for DB, LB, TB, TS
 Global $iOldNbrOfDetectedMines[$iModeCount+1], $iOldNbrOfDetectedCollectors[$iModeCount+1], $iOldNbrOfDetectedDrills[$iModeCount+1] ; number of mines, collectors, drills detected for DB, LB, TB
+Global $iOldsmartZapGain = 0, $iOldNumLTSpellsUsed = 0 ; Used to Update Smart Zap Totals
 
 Func UpdateStats()
 	If $FirstRun = 1 Then
@@ -299,6 +300,16 @@ Func UpdateStats()
 		$iOldDElixirFromDrills = $iDElixirFromDrills
 	EndIf
 
+	If $iOldSmartZapGain <> $smartZapGain Then
+		GUICtrlSetData($lblSmartZap, _NumberFormat($smartZapGain, True))
+		$iOldSmartZapGain = $smartZapGain
+	EndIf
+
+	If $iOldNumLTSpellsUsed <> $numLSpellsUsed Then
+		GUICtrlSetData($lblLightningUsed, _NumberFormat($numLSpellsUsed, True))
+		$iOldNumLTSpellsUsed = $numLSpellsUsed
+ 	EndIf
+
 	Local $iAttackedCount = 0
 
 	For $i = 0 To $iModeCount
@@ -427,6 +438,8 @@ Func ResetStats()
 	$iGoldFromMines = 0
 	$iElixirFromCollectors = 0
 	$iDElixirFromDrills = 0
+	$smartZapGain = 0
+	$numLSpellsUsed = 0
 	For $i = 0 To $iModeCount
 		$iAttackedVillageCount[$i] = 0
 		$iTotalGoldGain[$i] = 0

@@ -5,7 +5,7 @@
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........: GkevinOD (2014)
-; Modified ......: Hervidero (2015), kaganus (August-2015)
+; Modified ......: Hervidero (2015), kaganus (August-2015), LunaEclipse(January, 2016)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
@@ -51,6 +51,8 @@ AtkLogHead()
 #include "GUI\MBR GUI Control Tab Attack.au3"
 #include "GUI\MBR GUI Control Tab AttackCSV.au3"
 #include "GUI\MBR GUI Control Tab Advanced.au3"
+; SmartZap Tab added by LunaEclipse
+#include "GUI\MBR GUI Control Tab SmartZap.au3"
 #include "GUI\MBR GUI Control Tab EndBattle.au3"
 #include "GUI\MBR GUI Control Tab Donate.au3"
 #include "GUI\MBR GUI Control Tab Misc.au3"
