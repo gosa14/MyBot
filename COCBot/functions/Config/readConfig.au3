@@ -667,6 +667,10 @@ Func readConfig() ;Reads config and sets it to the variables
 ;~ 		$MilkFarmAlgorithmTh = IniRead($config,"MilkingAttack","TownHallAlgorithm","Bam")
 ;~ 		$MilkFarmSnipeEvenIfNoExtractorsFound = IniRead($config,"MilkingAttack","TownHallHitAnyway","1")
 
+		; SmartZap Settings - Added by LunaEclipse
+		$ichkSmartZap = IniRead($config, "SmartZap", "UseSmartZap", "1")
+		$ichkSmartZapDB = IniRead($config, "SmartZap", "ZapDBOnly", "1")
+		$itxtMinDE = IniRead($config, "SmartZap", "MinDE", "250")
 
 
 	Else
