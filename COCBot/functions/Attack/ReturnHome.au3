@@ -6,7 +6,7 @@
 ;                  $GoldChangeCheck     - [optional] an unknown value. Default is True.
 ; Return values .: None
 ; Author ........:
-; Modified ......: KnowJack (Jun/Aug2015), MonkeyHunter (2106-01)
+; Modified ......: KnowJack (Jun/Aug2015), MonkeyHunter (2106-01), LunaEclipse(March, 2016)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
@@ -31,6 +31,10 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 			While GoldElixirChangeEBO()
 				If _Sleep($iDelayReturnHome1) Then Return
 			WEnd
+
+			; Check to see if we should zap the DE Drills - Added by LunaEclipse
+			smartZap()
+
 			;If Heroes were not activated: Hero Ability activation before End of Battle to restore health
 			If ($checkKPower = True Or $checkQPower = True) And $iActivateKQCondition = "Auto" Then
 				;_CaptureRegion()

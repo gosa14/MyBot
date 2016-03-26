@@ -31,11 +31,12 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 
 	;If $OptTrophyMode = 1 And SearchTownHallLoc() Then; Return ;Exit attacking if trophy hunting and not bullymode
 	If $iMatchMode = $TS Then; Return ;Exit attacking if trophy hunting and not bullymode
-		If ($THusedKing = 0 And $THusedQueen = 0) Then
-			Setlog("Wait few sec before close attack")
-			If _Sleep(Random(2, 5, 1) * 1000) Then Return ;wait 2-5 second before exit if king and queen are not dropped
-		Else
+		If ($THusedKing = 1 Or $THusedQueen = 1) And ($ichkSmartZapSaveHeroes = 1 Or $ichkSmartZap = 0) Then
 			SetLog("King and/or Queen dropped, close attack")
+			If $ichkSmartZap = 1 Then SetLog("Skipping SmartZap to protect your royals!", $COLOR_FUCHSIA)
+		ElseIf Not SmartZap() And $THusedKing = 0 And $THusedQueen = 0 Then
+			Setlog("Wait few sec before close attack")
+			If _Sleep(Random(2, 5, 1) * 1000) Then Return ; wait 2-5 second before exit if king and queen are not dropped
 		EndIf
 
 		;close battle
