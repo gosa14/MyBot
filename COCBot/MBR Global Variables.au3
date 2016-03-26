@@ -396,8 +396,8 @@ Global $iChkSearchReduction
 Global $ReduceCount, $ReduceGold, $ReduceElixir, $ReduceGoldPlusElixir, $ReduceDark, $ReduceTrophy ; Reducing values
 ;Global $chkConditions[7], $ichkMeetOne ;Conditions (meet gold...)
 ;Global $icmbTH
-Global $iChkEnableAfter[$iModeCount], $iCmbMeetGE[$iModeCount], $iChkMeetDE[$iModeCount], $iChkMeetTrophy[$iModeCount], $iChkMeetTH[$iModeCount], $iChkMeetTHO[$iModeCount], $iChkMeetOne[$iModeCount], $iCmbTH[$iModeCount], $iChkWeakBase[$iModeCount]
-Global $chkDBMeetTHO, $chkABMeetTHO, $chkATH
+Global $iChkEnableAfter[$iModeCount], $iCmbMeetGE[$iModeCount], $iChkMeetDE[$iModeCount], $iChkMeetTrophy[$iModeCount], $iChkMeetTH[$iModeCount], $iChkMeetTHO[$iModeCount], $iChkNoLeague[$iModeCount], $iChkMeetOne[$iModeCount], $iCmbTH[$iModeCount], $iChkWeakBase[$iModeCount], $iChkWeakBase[$iModeCount]
+Global $chkDBMeetTHO, $chkABMeetTHO, $chkATH, $chkDBNoLeague, $chkABNoLeague
 Global $THLocation
 Global $THx = 0, $THy = 0
 Global $DESLoc
