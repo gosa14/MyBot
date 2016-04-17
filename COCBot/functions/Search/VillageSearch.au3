@@ -229,7 +229,8 @@ Func VillageSearch() ;Control for searching a village that meets conditions
 
 		Local $MilkingExtractorsMatch = 0
 		$MilkFarmObjectivesSTR = ""
-		If $match[$LB] And $iChkDeploySettings[$LB] = 6 Then ;MilkingAttack
+		; Modified by LunaEclipse
+		If $match[$LB] And $iChkDeploySettings[$LB] = $eMilking Then ; MilkingAttack
 			If $debugsetlog = 1 Then Setlog("Check Milking...", $COLOR_BLUE)
 			MilkingDetectRedArea()
 			$MilkingExtractorsMatch = MilkingDetectElixirExtractors()
@@ -258,19 +259,22 @@ Func VillageSearch() ;Control for searching a village that meets conditions
 				_WinAPI_DeleteObject($hBitmap)
 			EndIf
 			ExitLoop
-		ElseIf $match[$LB] And $iChkDeploySettings[$LB] = 6 And StringLen($MilkFarmObjectivesSTR) > 0 Then
+		; Modified by LunaEclipse
+		ElseIf $match[$LB] And $iChkDeploySettings[$LB] = $eMilking And StringLen($MilkFarmObjectivesSTR) > 0 Then
 			SetLog($GetResourcesTXT, $COLOR_GREEN, "Lucida Console", 7.5)
 			SetLog("      " & "Milking on: " & $MilkingExtractorsMatch &" resources!", $COLOR_GREEN, "Lucida Console", 7.5)
 			$logwrited = True
 			$iMatchMode = $LB
 			ExitLoop
-		ElseIf $match[$LB] And Not $dbBase And $iChkDeploySettings[$LB] <> 6 Then
+		; Modified by LunaEclipse
+		ElseIf $match[$LB] And Not $dbBase And $iChkDeploySettings[$LB] <> $eMilking Then
 			SetLog($GetResourcesTXT, $COLOR_GREEN, "Lucida Console", 7.5)
 			SetLog("      " & "Live Base Found!", $COLOR_GREEN, "Lucida Console", 7.5)
 			$logwrited = True
 			$iMatchMode = $LB
 			ExitLoop
-		ElseIf $match[$LB] Or $match[$DB] And $iChkDeploySettings[$LB] <> 6 Then
+		; Modified by LunaEclipse
+		ElseIf $match[$LB] Or $match[$DB] And $iChkDeploySettings[$LB] <> $eMilking Then
 			If $OptBullyMode = 1 And ($SearchCount >= $ATBullyMode) Then
 				If $SearchTHLResult = 1 Then
 					SetLog($GetResourcesTXT, $COLOR_GREEN, "Lucida Console", 7.5)

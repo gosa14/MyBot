@@ -667,8 +667,32 @@ Func readConfig() ;Reads config and sets it to the variables
 ;~ 		$MilkFarmAlgorithmTh = IniRead($config,"MilkingAttack","TownHallAlgorithm","Bam")
 ;~ 		$MilkFarmSnipeEvenIfNoExtractorsFound = IniRead($config,"MilkingAttack","TownHallHitAnyway","1")
 
+        ; SmartZap Settings - Added by LunaEclipse
+        $ichkSmartZap = IniRead($config, "SmartZap", "UseSmartZap", "1")
+        $ichkSmartZapDB = IniRead($config, "SmartZap", "ZapDBOnly", "1")
+        $ichkSmartZapSaveHeroes = IniRead($config, "SmartZap", "THSnipeSaveHeroes", "1")
+        $itxtMinDE = IniRead($config, "SmartZap", "MinDE", "250")
 
+		; Multi Finger Attack Style Settings - Added by LunaEclipse
+		$iMultiFingerStyle[$DB] = IniRead($config, "MultiFinger", "DeadBaseStyle", "0")
 
+		; Save Troops for Collector Settings - Added by LunaEclipse
+		$useFFBarchST = IniRead($config, "SaveTroops", "ChangeFF", "1")
+		$percentCollectors = IniRead($config, "SaveTroops", "PercentCollectors", "80")
+		$redlineDistance = IniRead($config, "SaveTroops", "MaxDistance", "50")
+
+		; Misc Battle Settings - Added by LunaEclipse
+		$AndroidAdbClicksEnabled = IniRead($config, "Fast Clicks", "UseADBFastClicks", "0")
+
+		; Custom Deployment Settings - Added by LunaEclipse
+		$deployValues = deployStringToArray(IniRead($config, "Custom Deployment", "Deployment", ""))
+		$valueTownHall = IniRead($config, "Custom Deployment", "TownHallPoints", "5")
+		$valueDEStorage = IniRead($config, "Custom Deployment", "DEStoragePoints", "10")
+		$valueGoldStorage = IniRead($config, "Custom Deployment", "GoldStoragePoints", "3")
+		$valueElixirStorage = IniRead($config, "Custom Deployment", "ElixirStoragePoints", "3")
+		$valueGoldMine = IniRead($config, "Custom Deployment", "GoldMinePoints", "1")
+		$valueElixirCollector = IniRead($config, "Custom Deployment", "ElixirCollectorPoints", "1")
+		$valueDEDrill = IniRead($config, "Custom Deployment", "DEDrillPoints", "2")
 	Else
 		Return False
 	EndIf

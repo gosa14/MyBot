@@ -5,7 +5,7 @@
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........: kaganus (2015-jun-20)
-; Modified ......:
+; Modified ......: LunaEclipse(January, 2016)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
@@ -29,6 +29,7 @@ Global $iOldGoldFromMines, $iOldElixirFromCollectors, $iOldDElixirFromDrills ; n
 Global $iOldAttackedCount, $iOldAttackedVillageCount[$iModeCount+1] ; number of attack villages for DB, LB, TB, TS
 Global $iOldTotalGoldGain[$iModeCount+1], $iOldTotalElixirGain[$iModeCount+1], $iOldTotalDarkGain[$iModeCount+1], $iOldTotalTrophyGain[$iModeCount+1] ; total resource gains for DB, LB, TB, TS
 Global $iOldNbrOfDetectedMines[$iModeCount+1], $iOldNbrOfDetectedCollectors[$iModeCount+1], $iOldNbrOfDetectedDrills[$iModeCount+1] ; number of mines, collectors, drills detected for DB, LB, TB
+Global $iOldsmartZapGain = 0, $iOldNumLTSpellsUsed = 0 ; Used to Update Smart Zap Totals
 
 Func UpdateStats()
 	If $FirstRun = 1 Then
@@ -42,6 +43,7 @@ Func UpdateStats()
 		GUICtrlSetState($picResultGoldNow, $GUI_SHOW)
 		GUICtrlSetState($lblResultElixirNow, $GUI_SHOW)
 		GUICtrlSetState($picResultElixirNow, $GUI_SHOW)
+
 		If $iDarkCurrent <> "" Then
 			GUICtrlSetState($lblResultDeNow, $GUI_SHOW)
 			GUICtrlSetState($picResultDeNow, $GUI_SHOW)
@@ -51,34 +53,44 @@ Func UpdateStats()
 			GUICtrlSetState($picDarkLastAttack, $GUI_HIDE)
 			GUICtrlSetState($picHourlyStatsDark, $GUI_HIDE)
 		EndIf
+
 		GUICtrlSetState($lblResultTrophyNow, $GUI_SHOW)
 		GUICtrlSetState($lblResultBuilderNow, $GUI_SHOW)
 		GUICtrlSetState($lblResultGemNow, $GUI_SHOW)
+
 		$iGoldStart = $iGoldCurrent
 		$iElixirStart = $iElixirCurrent
 		$iDarkStart = $iDarkCurrent
 		$iTrophyStart = $iTrophyCurrent
+
 		GUICtrlSetData($lblResultGoldStart, _NumberFormat($iGoldCurrent, True))
 		GUICtrlSetData($lblResultGoldNow, _NumberFormat($iGoldCurrent, True))
 		$iOldGoldCurrent = $iGoldCurrent
+
 		GUICtrlSetData($lblResultElixirStart, _NumberFormat($iElixirCurrent, True))
 		GUICtrlSetData($lblResultElixirNow, _NumberFormat($iElixirCurrent, True))
 		$iOldElixirCurrent = $iElixirCurrent
+
 		If $iDarkStart <> "" Then
 			GUICtrlSetData($lblResultDEStart, _NumberFormat($iDarkCurrent, True))
 			GUICtrlSetData($lblResultDeNow, _NumberFormat($iDarkCurrent, True))
 			$iOldDarkCurrent = $iDarkCurrent
 		EndIf
+
 		GUICtrlSetData($lblResultTrophyStart, _NumberFormat($iTrophyCurrent, True))
 		GUICtrlSetData($lblResultTrophyNow, _NumberFormat($iTrophyCurrent, True))
 		$iOldTrophyCurrent = $iTrophyCurrent
+
 		GUICtrlSetData($lblResultGemNow, _NumberFormat($iGemAmount, True))
 		$iOldGemAmount = $iGemAmount
+
 		GUICtrlSetData($lblResultBuilderNow, $iFreeBuilderCount & "/" & $iTotalBuilderCount)
 		$iOldFreeBuilderCount = $iFreeBuilderCount
 		$iOldTotalBuilderCount = $iTotalBuilderCount
+		
 		$FirstRun = 0
 		GUICtrlSetState($btnResetStats, $GUI_ENABLE)
+
 		Return
 	EndIf
 
@@ -87,15 +99,18 @@ Func UpdateStats()
 		GUICtrlSetState($lblLastAttackBonusTemp, $GUI_HIDE)
 		GUICtrlSetState($lblTotalLootTemp, $GUI_HIDE)
 		GUICtrlSetState($lblHourlyStatsTemp, $GUI_HIDE)
+
 		$FirstAttack = 2
 	EndIf
 
 	If $ResetStats = 1 Then
 		GUICtrlSetData($lblResultGoldStart, _NumberFormat($iGoldCurrent, True))
 		GUICtrlSetData($lblResultElixirStart, _NumberFormat($iElixirCurrent, True))
+
 		If $iDarkStart <> "" Then
 			GUICtrlSetData($lblResultDEStart, _NumberFormat($iDarkCurrent, True))
 		EndIf
+
 		GUICtrlSetData($lblResultTrophyStart, _NumberFormat($iTrophyCurrent, True))
 		GUICtrlSetData($lblHourlyStatsGold, "")
 		GUICtrlSetData($lblHourlyStatsElixir, "")
@@ -299,10 +314,19 @@ Func UpdateStats()
 		$iOldDElixirFromDrills = $iDElixirFromDrills
 	EndIf
 
+	If $iOldSmartZapGain <> $smartZapGain Then
+		GUICtrlSetData($lblSmartZap, _NumberFormat($smartZapGain, True))
+		$iOldSmartZapGain = $smartZapGain
+	EndIf
+
+	If $iOldNumLTSpellsUsed <> $numLSpellsUsed Then
+		GUICtrlSetData($lblLightningUsed, _NumberFormat($numLSpellsUsed, True))
+		$iOldNumLTSpellsUsed = $numLSpellsUsed
+ 	EndIf
+
 	Local $iAttackedCount = 0
 
 	For $i = 0 To $iModeCount
-
 		If $iOldAttackedVillageCount[$i] <> $iAttackedVillageCount[$i] Then
 			GUICtrlSetData($lblAttacked[$i], _NumberFormat($iAttackedVillageCount[$i], True))
 			$iOldAttackedVillageCount[$i] = $iAttackedVillageCount[$i]
@@ -328,7 +352,6 @@ Func UpdateStats()
 			GUICtrlSetData($lblTotalTrophyGain[$i], _NumberFormat($iTotalTrophyGain[$i], True))
 			$iOldTotalTrophyGain[$i] = $iTotalTrophyGain[$i]
 		EndIf
-
 	Next
 
 	If $iOldAttackedCount <> $iAttackedCount Then
@@ -338,7 +361,6 @@ Func UpdateStats()
 	EndIf
 
 	For $i = 0 To $iModeCount
-
 		If $i = $TS Then ContinueLoop
 
 		If $iOldNbrOfDetectedMines[$i] <> $iNbrOfDetectedMines[$i] Then
@@ -355,7 +377,6 @@ Func UpdateStats()
 			GUICtrlSetData($lblNbrOfDetectedDrills[$i], $iNbrOfDetectedDrills[$i])
 			$iOldNbrOfDetectedDrills[$i] = $iNbrOfDetectedDrills[$i]
 		EndIf
-
 	Next
 
 	If $FirstAttack = 2 Then
@@ -371,13 +392,11 @@ Func UpdateStats()
 		If $iDarkStart <> "" Then
 			GUICtrlSetData($lblResultDEHourNow, _NumberFormat(Round($iDarkTotal / (Int(TimerDiff($sTimer) + $iTimePassed)) * 3600 * 1000)) & " / h")      ;GUI BOTTOM
 		EndIf
-
 	EndIf
 
 	If $ResetStats = 1 Then
 		$ResetStats = 0
 	EndIf
-
 EndFunc
 
 Func ResetStats()
@@ -427,6 +446,8 @@ Func ResetStats()
 	$iGoldFromMines = 0
 	$iElixirFromCollectors = 0
 	$iDElixirFromDrills = 0
+	$smartZapGain = 0
+	$numLSpellsUsed = 0
 	For $i = 0 To $iModeCount
 		$iAttackedVillageCount[$i] = 0
 		$iTotalGoldGain[$i] = 0

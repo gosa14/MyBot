@@ -28,16 +28,10 @@ Func _GetRedArea()
 	Local $xSkip = 1
 	Local $ySkip = 5
 
-	If $iMatchMode = $LB And $iChkDeploySettings[$LB] = 4 Then ; Used for DES Side Attack (need to know the side the DES is on)
-		Local $result = DllCall($hFuncLib, "str", "getRedAreaSideBuilding", "ptr", $hHBitmap2, "int", $xSkip, "int", $ySkip, "int", $colorVariation, "int", $eSideBuildingDES)
-		If $debugSetlog Then Setlog("Debug: Redline with DES Side chosen")
-	ElseIf $iMatchMode = $LB And $iChkDeploySettings[$LB] = 5 Then ; Used for TH Side Attack (need to know the side the TH is on)
-		Local $result = DllCall($hFuncLib, "str", "getRedAreaSideBuilding", "ptr", $hHBitmap2, "int", $xSkip, "int", $ySkip, "int", $colorVariation, "int", $eSideBuildingTH)
-		If $debugSetlog Then Setlog("Debug: Redline with TH Side chosen")
-	Else ; Normal getRedArea
-		Local $result = DllCall($hFuncLib, "str", "getRedArea", "ptr", $hHBitmap2, "int", $xSkip, "int", $ySkip, "int", $colorVariation)
-		If $debugSetlog Then Setlog("Debug: Redline chosen")
-	EndIf
+	; Removed check for old DE side and TH side attacks - LunaEclipse
+	Local $result = DllCall($hFuncLib, "str", "getRedArea", "ptr", $hHBitmap2, "int", $xSkip, "int", $ySkip, "int", $colorVariation)
+	If $debugSetlog Then Setlog("Debug: Redline chosen")
+
 	Local $listPixelBySide = StringSplit($result[0], "#")
 	$PixelTopLeft = GetPixelSide($listPixelBySide, 1)
 	$PixelBottomLeft = GetPixelSide($listPixelBySide, 2)
@@ -49,7 +43,8 @@ Func _GetRedArea()
 	ReDim $PixelRedArea[UBound($PixelTopLeft) + UBound($PixelBottomLeft) + UBound($PixelTopRight) + UBound($PixelBottomRight)]
 	ReDim $PixelRedAreaFurther[UBound($PixelTopLeft) + UBound($PixelBottomLeft) + UBound($PixelTopRight) + UBound($PixelBottomRight)]
 
-	If ($iMatchMode = $LB And $iChkDeploySettings[$LB] = 6) OR ($iMatchMode = $DB and $ichkUseAttackDBCSV = 1) OR ($iMatchMode = $LB and $ichkUseAttackABCSV = 1) Then
+	; Modified by LunaEclipse
+	If ($iMatchMode = $LB And $iChkDeploySettings[$LB] = $eMilking) OR ($iMatchMode = $DB and $ichkUseAttackDBCSV = 1) OR ($iMatchMode = $LB and $ichkUseAttackABCSV = 1) Then
 		ReDim $PixelTopLeftFurther[UBound($PixelTopLeft)]
 		ReDim $PixelBottomLeftFurther[UBound($PixelBottomLeft)]
 		ReDim $PixelTopRightFurther[UBound($PixelTopRight)]

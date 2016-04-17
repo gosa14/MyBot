@@ -1716,6 +1716,60 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	EndIf
 	chkUseAttackABCSV()
 
+    ; SmartZap Settings - Added by LunaEclipse
+    If $ichkSmartZap = 1 Then
+        GUICtrlSetState($chkSmartLightSpell, $GUI_CHECKED)
+        GUICtrlSetState($chkSmartZapDB, $GUI_ENABLE)
+        GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_ENABLE)
+        GUICtrlSetState($txtMinDark, $GUI_ENABLE)
+    Else
+        GUICtrlSetState($chkSmartZapDB, $GUI_DISABLE)
+        GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_DISABLE)
+        GUICtrlSetState($txtMinDark, $GUI_DISABLE)
+        GUICtrlSetState($chkSmartLightSpell, $GUI_UNCHECKED)
+    EndIf
+    If $ichkSmartZapDB = 1 Then
+        GUICtrlSetState($chkSmartZapDB, $GUI_CHECKED)
+    Else
+        GUICtrlSetState($chkSmartZapDB, $GUI_UNCHECKED)
+    EndIf
+    If $ichkSmartZapSaveHeroes = 1 Then
+        GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_CHECKED)
+    Else
+        GUICtrlSetState($chkSmartZapSaveHeroes, $GUI_UNCHECKED)
+    EndIf
+    GUICtrlSetData($txtMinDark, $itxtMinDE)
+
+	; Multi Finger Attack Style Settings - Added by LunaEclipse
+	_GUICtrlComboBox_SetCurSel($cmbDBMultiFinger, $iMultiFingerStyle[$DB])
+
+	; Save Troops for Collector Settings - Added by LunaEclipse
+	If $useFFBarchST = 1 Then
+		GUICtrlSetState($chkChangeFF, $GUI_CHECKED)
+	Else
+		GUICtrlSetState($chkChangeFF, $GUI_UNCHECKED)
+	EndIf
+	GUICtrlSetData($txtPercentCollectors, $percentCollectors)
+	GUICtrlSetData($txtDistance, $redlineDistance)
+
+	; Misc Battle Settings - Added by LunaEclipse
+	If $AndroidAdbClicksEnabled = 1 Then
+		GUICtrlSetState($chkFastADBClicks, $GUI_CHECKED)
+		$AndroidAdbClicksEnabled = True
+	Else
+		GUICtrlSetState($chkFastADBClicks, $GUI_UNCHECKED)
+		$AndroidAdbClicksEnabled = False
+	EndIf
+
+	; Custom Deployment Settings - Added by LunaEclipse
+	GUICtrlSetData($txtTownHall, $valueTownHall)
+	GUICtrlSetData($txtDEStorage, $valueDEStorage)
+	GUICtrlSetData($txtGoldStorage, $valueGoldStorage)
+	GUICtrlSetData($txtElixirStorage, $valueElixirStorage)
+	GUICtrlSetData($txtGoldMine, $valueGoldMine)
+	GUICtrlSetData($txtElixirCollector, $valueElixirCollector)
+	GUICtrlSetData($txtDEDrill, $valueDEDrill)
+	deployArrayToUISettings($deployValues)
 
 	; Reenabling window redraw
 	If $bRedrawAtExit Then SetRedrawBotWindow(True)

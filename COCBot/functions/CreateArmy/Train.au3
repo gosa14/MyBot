@@ -16,8 +16,8 @@ Global $LastBarrackTrainDonatedTroop = 1
 Global $LastDarkBarrackTrainDonatedTroop = 1
 
 Func Train()
-
-	If $iChkDeploySettings[$LB] = 6 Then
+	; Modified by LunaEclipse
+	If $iChkDeploySettings[$LB] = $eMilking Then
 		Local $TempTroopGroup[10][3] = [["Gobl", 3, 1],["Arch", 1, 1], ["Giant", 2, 5], ["Wall", 4, 2], ["Barb", 0, 1],  ["Heal", 7, 14], ["Pekk", 9, 25], ["Ball", 5, 5], ["Wiza", 6, 4], ["Drag", 8, 20]]
 		$TroopGroup = $TempTroopGroup
 		Local $tempTroopName[UBound($TroopGroup, 1)]

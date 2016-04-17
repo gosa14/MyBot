@@ -1604,6 +1604,52 @@ Func saveConfig() ;Saves the controls settings to the config
 ;~     IniWrite($config, "MilkingAttack", "TownHallAlgorithm", $MilkFarmAlgorithmTh)
 ;~     IniWrite($config, "MilkingAttack", "TownHallHitAnyway", $MilkFarmSnipeEvenIfNoExtractorsFound)
 
-	If $hFile <> -1 Then FileClose($hFile)
+    ; SmartZap Settings - Added by LunaEclipse
+    If GUICtrlRead($chkSmartLightSpell) = $GUI_CHECKED Then
+        IniWrite($config, "SmartZap", "UseSmartZap", 1)
+    Else
+        IniWrite($config, "SmartZap", "UseSmartZap", 0)
+    EndIf
+    If GUICtrlRead($chkSmartZapDB) = $GUI_CHECKED Then
+        IniWrite($config, "SmartZap", "ZapDBOnly", 1)
+    Else
+        IniWrite($config, "SmartZap", "ZapDBOnly", 0)
+    EndIf
+    If GUICtrlRead($chkSmartZapSaveHeroes) = $GUI_CHECKED Then
+        IniWrite($config, "SmartZap", "THSnipeSaveHeroes", 1)
+    Else
+        IniWrite($config, "SmartZap", "THSnipeSaveHeroes", 0)
+    EndIf
+    IniWrite($config, "SmartZap", "MinDE", GUICtrlRead($txtMinDark))
 
+	; Multi Finger Attack Style Settings - Added by LunaEclipse
+	IniWrite($config, "MultiFinger", "DeadBaseStyle", _GUICtrlComboBox_GetCurSel($cmbDBMultiFinger))
+
+	; Save Troops for Collector Settings - Added by LunaEclipse
+	If GUICtrlRead($chkChangeFF) = $GUI_CHECKED Then
+		IniWrite($config, "SaveTroops", "ChangeFF", 1)
+	Else
+		IniWrite($config, "SaveTroops", "ChangeFF", 0)
+	EndIf
+	IniWrite($config, "SaveTroops", "PercentCollectors", GUICtrlRead($txtPercentCollectors))
+	IniWrite($config, "SaveTroops", "MaxDistance", GUICtrlRead($txtDistance))
+
+	; Misc Battle Settings - Added by LunaEclipse
+	If GUICtrlRead($chkFastADBClicks) = $GUI_CHECKED Then
+		IniWrite($config, "Fast Clicks", "UseADBFastClicks", 1)
+	Else
+		IniWrite($config, "Fast Clicks", "UseADBFastClicks", 0)
+	EndIf
+
+	; Custom Deployment Settings - Added by LunaEclipse
+	IniWrite($config, "Custom Deployment", "Deployment", deployArrayToString($deployValues))
+	IniWrite($config, "Custom Deployment", "TownHallPoints", GUICtrlRead($txtTownHall))
+	IniWrite($config, "Custom Deployment", "DEStoragePoints", GUICtrlRead($txtDEStorage))
+	IniWrite($config, "Custom Deployment", "GoldStoragePoints", GUICtrlRead($txtGoldStorage))
+	IniWrite($config, "Custom Deployment", "ElixirStoragePoints", GUICtrlRead($txtElixirStorage))
+	IniWrite($config, "Custom Deployment", "GoldMinePoints", GUICtrlRead($txtGoldMine))
+	IniWrite($config, "Custom Deployment", "ElixirCollectorPoints", GUICtrlRead($txtElixirCollector))
+	IniWrite($config, "Custom Deployment", "DEDrillPoints", GUICtrlRead($txtDEDrill))
+
+	If $hFile <> -1 Then FileClose($hFile)
 EndFunc   ;==>saveConfig
