@@ -5,7 +5,7 @@
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........: GKevinOD (2014)
-; Modified ......: DkEd, Hervidero (2015)
+; Modified ......: DkEd, Hervidero (2015), LunaEclipse (April, 2016)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
@@ -17,13 +17,14 @@
 ; Attack Basics Tab
 ;~ -------------------------------------------------------------
 
-$tabAttack = GUICtrlCreateTabItem(GetTranslated(3,1, "Attack"))
+$tabAttack = GUICtrlCreateTabItem(GetTranslated(3, 1, "Attack"))
 	Local $x = 30, $y = 150
 	$grpDeadBaseDeploy = GUICtrlCreateGroup(GetTranslated(3,2, "DeadBase Deploy"), $x - 20, $y - 20, 225, 300);95)
 		$lblDBDeploy = GUICtrlCreateLabel(GetTranslated(3,3, "Attack on")&":", $x, $y + 5, -1, -1)
-		$cmbDBDeploy = GUICtrlCreateCombo("", $x + 55, $y, 120, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
-			GUICtrlSetTip(-1, GetTranslated(3,4, "Attack on a single side, penetrates through base") & @CRLF & GetTranslated(3,5, "Attack on two sides, penetrates through base") & @CRLF & GetTranslated(3,6, "Attack on three sides, gets outer and some inside of base"), GetTranslated(3,7,"Select the No. of sides to attack on."))
-			GUICtrlSetData(-1, GetTranslated(3,8, "one side") & "|" & GetTranslated(3,9, "two sides") & "|" & GetTranslated(3,10, "three sides") &"|" & GetTranslated(3,11,"all sides equally" ), GetTranslated(3,11, "all sides equally"))
+		$cmbDBDeploy = GUICtrlCreateCombo("", $x + 55, $y, 140, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+			GUICtrlSetTip(-1, GetTranslated(3, 4, "Attack on a single side, penetrates through base") & @CRLF & GetTranslated(3, 5, "Attack on two sides, penetrates through base") & @CRLF & GetTranslated(3, 6, "Attack on three sides, gets outer and some inside of base"), GetTranslated(3, 7,"Select the No. of sides to attack on."))
+			GUICtrlSetData(-1, GetTranslated(3, 8, "One Side") & "|" & GetTranslated(3, 9, "Two Sides") & "|" & GetTranslated(3, 10, "Three Sides") &"|" & GetTranslated(3, 11,"All Sides Equally" ) & "|" & "Save Troops for Collectors" & "|" & "Multi Finger", "Save Troops for Collectors")
+			GUICtrlSetOnEvent(-1, "chkDBSmartAttackRedArea")
 		$y += 25
 		$lblDBSelectTroop=GUICtrlCreateLabel(GetTranslated(3,12, "Troops") & ":",$x, $y + 5, -1 , -1)
 		$cmbDBSelectTroop=GUICtrlCreateCombo("", $x + 55, $y, 120, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
@@ -34,16 +35,25 @@ $tabAttack = GUICtrlCreateTabItem(GetTranslated(3,1, "Attack"))
 			GUICtrlSetTip(-1, $txtTip)
 		$cmbDBUnitDelay = GUICtrlCreateCombo("", $x + 55, $y, 36, 21, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
 			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetData(-1, "1|2|3|4|5|6|7|8|9|10", "5")
+			GUICtrlSetData(-1, "0|1|2|3|4|5|6|7|8|9|10", "0")
 		$lblDBWaveDelay = GUICtrlCreateLabel(GetTranslated(3,27, "Wave") & ":", $x + 100, $y + 5, -1, -1)
 			GUICtrlSetTip(-1, $txtTip)
 		$cmbDBWaveDelay = GUICtrlCreateCombo("", $x + 140, $y, 36, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
 			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetData(-1, "1|2|3|4|5|6|7|8|9|10", "5")
+			GUICtrlSetData(-1, "0|1|2|3|4|5|6|7|8|9|10", "0")
 		$y += 22
 		$chkDBRandomSpeedAtk = GUICtrlCreateCheckbox(GetTranslated(3,28, "Randomize delay for Units & Waves"), $x, $y, -1, -1)
 			GUICtrlSetTip(-1, $txtTip)
 			GUICtrlSetOnEvent(-1, "chkDBRandomSpeedAtk")
+		$y += 25
+		$lblDBMultiFinger = GUICtrlCreateLabel("Style:", $x - 10, $y + 3, 30, -1, $SS_RIGHT)
+		$cmbDBMultiFinger = GUICtrlCreateCombo("", $x + 25, $y, 170, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+			$txtTip = "Select which multi finger attack style you would like." & @CRLF & @CRLF & _ 
+				      "     Random will chose one of the attacks at random." & @CRLF & _ 
+				      "     Four Finger and Eight Finger attacks will attack from all 4 sides at once."
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetData(-1, "Random" & "|" & "Four Finger Standard" & "|" & "Four Finger Spiral Left" & "|" & "Four Finger Spiral Right" & "|" & "Eight Finger Blossom" & "|" & "Eight Finger Implosion" & "|" & "Eight Finger Pin Wheel Spiral Left" & "|" & "Eight Finger Pin Wheel Spiral Right", "Random")
+			GUICtrlSetOnEvent(-1, "cmbDBMultiFinger")
 	$y = 243
 		$chkDBSmartAttackRedArea = GUICtrlCreateCheckbox(GetTranslated(3,29, "Use Smart Attack: Near Red Line."), $x, $y, -1, -1)
 			$txtTip = GetTranslated(3,30, "Use Smart Attack to detect the outer 'Red Line' of the village to attack. And drop your troops close to it.")
@@ -59,80 +69,89 @@ $tabAttack = GUICtrlCreateTabItem(GetTranslated(3,1, "Attack"))
 			GUICtrlSetTip(-1, $txtTip)
 		$y += 26
 		$chkDbAttackNearGoldMine = GUICtrlCreateCheckbox("", $x + 20, $y, 17, 17)
-			$txtTip = GetTranslated(3,37, "Drop troops near Gold Mines")
+			$txtTip = "Save Troops for Collectors:" & @CRLF & _ 
+					  "     Select this option to check Gold Mines." & @CRLF & _ 
+					  "     Troops will only be used if Gold Storage is not full!" & @CRLF & @CRLF & _ 
+					  "Other attack types: " & GetTranslated(3, 37, "Drop troops near Gold Mines")
 			GUICtrlSetTip(-1, $txtTip)
 		$picDBAttackNearGoldMine = GUICtrlCreateIcon($pIconLib, $eIcnMine, $x + 40 , $y - 3 , 24, 24)
 			GUICtrlSetTip(-1, $txtTip)
 		$x += 75
 		$chkDBAttackNearElixirCollector = GUICtrlCreateCheckbox("", $x, $y, 17, 17)
-			$txtTip = GetTranslated(3,38, "Drop troops near Elixir Collectors")
+			$txtTip = "Save Troops for Collectors:" & @CRLF & _ 
+					  "     Select this option to check Elixir Collectors." & @CRLF & _ 
+					  "     Troops will only be used if Elixir Storage is not full!" & @CRLF & @CRLF & _ 
+					  "Other attack types: " & GetTranslated(3, 38, "Drop troops near Elixir Collectors")
 			GUICtrlSetTip(-1, $txtTip)
 		$picDBAttackNearElixirCollector = GUICtrlCreateIcon($pIconLib, $eIcnCollector, $x + 20 , $y - 3 , 24, 24)
 			GUICtrlSetTip(-1, $txtTip)
  		$x += 55
   		$chkDBAttackNearDarkElixirDrill = GUICtrlCreateCheckbox("", $x, $y, 17, 17)
-			$txtTip = GetTranslated(3,39, "Drop troops near Dark Elixir Drills")
+			$txtTip = "Save Troops for Collectors:" & @CRLF & _ 
+			          "     Select this option to check Dark Elixir Drills." & @CRLF & _ 
+					  "     Troops will only be used if Dark Elixir Storage is not full!" & @CRLF & @CRLF & _ 
+					  "Other attack types: " & GetTranslated(3, 39, "Drop troops near Dark Elixir Drills")
  			GUICtrlSetTip(-1, $txtTip)
 		$picDBAttackNearDarkElixirDrill = GUICtrlCreateIcon($pIconLib, $eIcnDrill, $x + 20 , $y - 3, 24, 24)
  			GUICtrlSetTip(-1, $txtTip)
-	$x = 35
-	$y = 335
-		$lblUseInBattleDB = GUICtrlCreateLabel(GetTranslated(3,68, "Hero and CC Deploy") & ":", $x, $y + 5, -1, -1)
-	$y += 24
-		$lblUseInBattleDB1 = GUICtrlCreateLabel(GetTranslated(3,76, "Use"), $x + 12, $y, -1, -1)
-		$lblUseInBattleDB2 = GUICtrlCreateLabel(GetTranslated(3,77, "Wait"), $x + 39, $y, -1, -1)
-		$lblUseInBattleDB3 = GUICtrlCreateLabel(GetTranslated(3,76, -1), $x + 94, $y, -1, -1)
-		$lblUseInBattleDB4 = GUICtrlCreateLabel(GetTranslated(3,77, -1), $x + 120, $y, -1, -1)
-	$y +=12
-	$x -= 15
-		GUICtrlCreateIcon($pIconLib, $eIcnKing, $x , $y, 24, 24)
-			$txtTip = GetTranslated(3,79, "Select to Use King during Attack, or Wait for King before attack start") & @CRLF & GetTranslated(3,80, "Wait for Hero option disabled when continuous Upgrade Hero selected!")
-			GUICtrlSetTip(-1, $txtTip)
-		$chkDBKingAttack = GUICtrlCreateCheckbox("", $x + 32, $y + 4, 17, 17)
-		$txtTip = GetTranslated(3,41, "Use your King when Attacking..")
-			GUICtrlSetTip(-1, $txtTip)
-		$chkDBKingWait = GUICtrlCreateCheckbox("", $x + 54, $y + 4, 17, 17)
-			$txtTip = GetTranslated(3,73, "Wait for King to be ready before attacking...") & @CRLF & GetTranslated(3,80, "Wait for Hero option disabled when continuous Upgrade Hero selected!")
-			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetOnEvent(-1, "chkDBHeroWait")
-	$x += 82
-		GUICtrlCreateIcon($pIconLib, $eIcnQueen, $x, $y, 24, 24)
-			$txtTip = GetTranslated(3,81, "Select to Use Queen during Attack, or Wait for Queen before attack start") & @CRLF & GetTranslated(3,80, -1)
-			GUICtrlSetTip(-1, $txtTip)
-		$chkDBQueenAttack = GUICtrlCreateCheckbox("", $x + 32, $y + 4, 17, 17)
-			$txtTip = GetTranslated(3,43, "Use your Queen when Attacking..")
-			GUICtrlSetTip(-1, $txtTip)
-		$chkDBQueenWait = GUICtrlCreateCheckbox("", $x + 54, $y + 4, 17, 17)
-			$txtTip = GetTranslated(3,74, "Wait for Queen to be ready before attacking...") & @CRLF & GetTranslated(3,80, "Wait for Hero option disabled when continuous Upgrade Hero selected!")
-			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetOnEvent(-1, "chkDBHeroWait")
-	$x -= 82
-	$y += 30
-		GUICtrlCreateIcon($pIconLib, $eIcnWarden, $x, $y, 24, 24)
-			$txtTip = GetTranslated(3,82, "Select to Use Warden during Attack, or Wait for Warden before attack start") & @CRLF & GetTranslated(3,80, -1)
-			GUICtrlSetTip(-1, $txtTip)
-		$chkDBWardenAttack = GUICtrlCreateCheckbox("", $x + 32, $y + 4, 17, 17)
-			$txtTip = GetTranslated(3,69, "Use your Warden when Attacking..")
-			GUICtrlSetTip(-1, $txtTip)
-		$chkDBWardenWait = GUICtrlCreateCheckbox("", $x + 54, $y + 4, 17, 17)
-			$txtTip = GetTranslated(3,75, "Wait for Warden to be ready before attacking...") & @CRLF & GetTranslated(3,80, "Wait for Hero option disabled when continuous Upgrade Hero selected!")
-			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetOnEvent(-1, "chkDBHeroWait")
-	$x += 82
-			GUICtrlCreateIcon($pIconLib, $eIcnCC, $x, $y, 24, 24)
-			$txtTip =GetTranslated(3,45, "Drop your Clan Castle in battle if it contains troops.")
-			GUICtrlSetTip(-1, $txtTip)
-		$chkDBDropCC = GUICtrlCreateCheckbox( "", $x + 32, $y + 4, 17, 17)
+		$x = 35
+		$y = 335
+			$lblUseInBattleDB = GUICtrlCreateLabel(GetTranslated(3,68, "Hero and CC Deploy") & ":", $x, $y + 5, -1, -1)
+		$y += 24
+			$lblUseInBattleDB1 = GUICtrlCreateLabel(GetTranslated(3,76, "Use"), $x + 12, $y, -1, -1)
+			$lblUseInBattleDB2 = GUICtrlCreateLabel(GetTranslated(3,77, "Wait"), $x + 39, $y, -1, -1)
+			$lblUseInBattleDB3 = GUICtrlCreateLabel(GetTranslated(3,76, -1), $x + 94, $y, -1, -1)
+			$lblUseInBattleDB4 = GUICtrlCreateLabel(GetTranslated(3,77, -1), $x + 120, $y, -1, -1)
+		$y +=12
+		$x -= 15
+			GUICtrlCreateIcon($pIconLib, $eIcnKing, $x , $y, 24, 24)
+				$txtTip = GetTranslated(3,79, "Select to Use King during Attack, or Wait for King before attack start") & @CRLF & GetTranslated(3,80, "Wait for Hero option disabled when continuous Upgrade Hero selected!")
+				GUICtrlSetTip(-1, $txtTip)
+			$chkDBKingAttack = GUICtrlCreateCheckbox("", $x + 32, $y + 4, 17, 17)
+				$txtTip = GetTranslated(3,41, "Use your King when Attacking..")
+				GUICtrlSetTip(-1, $txtTip)
+			$chkDBKingWait = GUICtrlCreateCheckbox("", $x + 54, $y + 4, 17, 17)
+				$txtTip = GetTranslated(3,73, "Wait for King to be ready before attacking...") & @CRLF & GetTranslated(3,80, "Wait for Hero option disabled when continuous Upgrade Hero selected!")
+				GUICtrlSetTip(-1, $txtTip)
+				GUICtrlSetOnEvent(-1, "chkDBHeroWait")
+		$x += 82
+			GUICtrlCreateIcon($pIconLib, $eIcnQueen, $x, $y, 24, 24)
+				$txtTip = GetTranslated(3,81, "Select to Use Queen during Attack, or Wait for Queen before attack start") & @CRLF & GetTranslated(3,80, -1)
+				GUICtrlSetTip(-1, $txtTip)
+			$chkDBQueenAttack = GUICtrlCreateCheckbox("", $x + 32, $y + 4, 17, 17)
+				$txtTip = GetTranslated(3,43, "Use your Queen when Attacking..")
+				GUICtrlSetTip(-1, $txtTip)
+			$chkDBQueenWait = GUICtrlCreateCheckbox("", $x + 54, $y + 4, 17, 17)
+				$txtTip = GetTranslated(3,74, "Wait for Queen to be ready before attacking...") & @CRLF & GetTranslated(3,80, "Wait for Hero option disabled when continuous Upgrade Hero selected!")
+				GUICtrlSetTip(-1, $txtTip)
+				GUICtrlSetOnEvent(-1, "chkDBHeroWait")
+		$x -= 82
+		$y += 30
+			GUICtrlCreateIcon($pIconLib, $eIcnWarden, $x, $y, 24, 24)
+				$txtTip = GetTranslated(3,82, "Select to Use Warden during Attack, or Wait for Warden before attack start") & @CRLF & GetTranslated(3,80, -1)
+				GUICtrlSetTip(-1, $txtTip)
+			$chkDBWardenAttack = GUICtrlCreateCheckbox("", $x + 32, $y + 4, 17, 17)
+				$txtTip = GetTranslated(3,69, "Use your Warden when Attacking..")
+				GUICtrlSetTip(-1, $txtTip)
+			$chkDBWardenWait = GUICtrlCreateCheckbox("", $x + 54, $y + 4, 17, 17)
+				$txtTip = GetTranslated(3,75, "Wait for Warden to be ready before attacking...") & @CRLF & GetTranslated(3,80, "Wait for Hero option disabled when continuous Upgrade Hero selected!")
+				GUICtrlSetTip(-1, $txtTip)
+				GUICtrlSetOnEvent(-1, "chkDBHeroWait")
+		$x += 82
+				GUICtrlCreateIcon($pIconLib, $eIcnCC, $x, $y, 24, 24)
+				$txtTip =GetTranslated(3,45, "Drop your Clan Castle in battle if it contains troops.")
+				GUICtrlSetTip(-1, $txtTip)
+			$chkDBDropCC = GUICtrlCreateCheckbox( "", $x + 32, $y + 4, 17, 17)
 			GUICtrlSetTip(-1, $txtTip)
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 	Local $x = 260, $y = 150
 	$grpLiveBaseDeploy = GUICtrlCreateGroup(GetTranslated(3,46, "LiveBase Deploy"), $x - 20, $y - 20, 220, 300);95)
 		$lblABDeploy = GUICtrlCreateLabel(GetTranslated(3,3, -1) & ":", $x, $y + 5, -1, -1)
-		$cmbABDeploy = GUICtrlCreateCombo("", $x + 55, $y, 120, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
-			GUICtrlSetTip(-1, GetTranslated(3,4, -1) & @CRLF & GetTranslated(3,5, -1) & @CRLF & GetTranslated(3,6, -1) & @CRLF & GetTranslated(3,63, -1) & @CRLF & GetTranslated(3,64, "Attack on the single side closest to the Dark Elixir Storage") & @CRLF & GetTranslated(3,65, "Attack on the single side closest to the Townhall") & @CRLF & GetTranslated(3,83, "Milking Farm Attack"), GetTranslated(3,7, -1))
-			GUICtrlSetData(-1, GetTranslated(3,8, -1) & "|" & GetTranslated(3,9, -1) & "|" & GetTranslated(3,10, -1) & "|" & GetTranslated(3,11, -1) & "|" & GetTranslated(3,66, "DE Side Attack") & "|" & GetTranslated(3,67, "TH Side Attack")& "|" & GetTranslated(3,83, "Milking Farm Attack"), GetTranslated(3,11, -1))
-			GUICtrlSetOnEvent(-1, "cmbABDeploy")
+		$cmbABDeploy = GUICtrlCreateCombo("", $x + 55, $y, 140, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+			GUICtrlSetTip(-1, GetTranslated(3, 4, -1) & @CRLF & GetTranslated(3, 5, -1) & @CRLF & GetTranslated(3, 6, -1) & @CRLF & GetTranslated(3, 63, -1) & @CRLF & "Attack on the single side closest to the priority target" & @CRLF & GetTranslated(3,83, "Milking Farm Attack"), GetTranslated(3,7, -1))
+			GUICtrlSetData(-1, GetTranslated(3, 8, -1) & "|" & GetTranslated(3, 9, -1) & "|" & GetTranslated(3, 10, -1) & "|" & GetTranslated(3, 11, -1) & "|" & "Custom Side Deployment" & "|" & GetTranslated(3,83, "Milking Farm Attack"), "Custom Side Deployment")
+			GUICtrlSetOnEvent(-1, "chkABSmartAttackRedArea")
 		$y += 25
 		$lblABSelectTroop=GUICtrlCreateLabel(GetTranslated(3,12, -1) & ":",$x, $y + 5, -1 , -1)
 		$cmbABSelectTroop=GUICtrlCreateCombo("", $x + 55, $y, 120, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
@@ -143,12 +162,12 @@ $tabAttack = GUICtrlCreateTabItem(GetTranslated(3,1, "Attack"))
 			GUICtrlSetTip(-1, $txtTip)
 		$cmbABUnitDelay = GUICtrlCreateCombo("", $x + 55, $y, 36, 21, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
 			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetData(-1, "1|2|3|4|5|6|7|8|9|10", "5")
+			GUICtrlSetData(-1, "0|1|2|3|4|5|6|7|8|9|10", "5")
 		$lblABWaveDelay = GUICtrlCreateLabel(GetTranslated(3,27, -1) & ":", $x + 100, $y + 5, -1, -1)
 			GUICtrlSetTip(-1, $txtTip)
 		$cmbABWaveDelay = GUICtrlCreateCombo("", $x + 140, $y, 36, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
 			GUICtrlSetTip(-1, $txtTip)
-			GUICtrlSetData(-1, "1|2|3|4|5|6|7|8|9|10", "5")
+			GUICtrlSetData(-1, "0|1|2|3|4|5|6|7|8|9|10", "5")
 		$y += 22
 		$chkABRandomSpeedAtk = GUICtrlCreateCheckbox(GetTranslated(3,28, -1), $x, $y, -1, -1)
 			GUICtrlSetTip(-1, $txtTip)
@@ -184,10 +203,8 @@ $tabAttack = GUICtrlCreateTabItem(GetTranslated(3,1, "Attack"))
  			GUICtrlSetTip(-1, $txtTip)
 		$picABAttackNearDarkElixirDrill = GUICtrlCreateIcon($pIconLib, $eIcnDrill, $x + 20 , $y - 3, 24, 24)
  			GUICtrlSetTip(-1, $txtTip)
-
 		$btnMilkingOptions = GUICtrlCreateButton(GetTranslated(3,78,"Milking Options"), 302, $y+22, 153,20)
 			GUICtrlSetOnEvent(-1, "btnMilkingOptions")
-
 	$x -= 76
 	$y = 335
 		$lblUseInBattleAB = GUICtrlCreateLabel(GetTranslated(3,68, -1) & ":", $x, $y + 5, -1, -1)
@@ -237,7 +254,6 @@ $tabAttack = GUICtrlCreateTabItem(GetTranslated(3,1, "Attack"))
 			GUICtrlSetTip(-1, $txtTip)
 		$chkABDropCC = GUICtrlCreateCheckbox( "", $x + 32, $y + 4, 17, 17)
 			GUICtrlSetTip(-1, $txtTip)
-
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 	Local $x = 200, $y = 345
@@ -306,7 +322,5 @@ $tabAttack = GUICtrlCreateTabItem(GetTranslated(3,1, "Attack"))
 		$lblWardenAbilitiesSec = GUICtrlCreateLabel(GetTranslated(3,62, -1), $x + 293, $y, -1, -1)
 			GUICtrlSetState(-1, $GUI_DISABLE+$GUI_HIDE)
 			GUICtrlSetColor (-1,$COLOR_RED)
-
-
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUICtrlCreateTabItem("")

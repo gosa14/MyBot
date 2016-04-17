@@ -5,7 +5,7 @@
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........: GkevinOD (2014)
-; Modified ......: Hervidero (2015)
+; Modified ......: Hervidero (2015), LunaEclipse (April, 2016)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
@@ -14,32 +14,74 @@
 ; ===============================================================================================================================
 
 Func chkDBSmartAttackRedArea()
-	If GUICtrlRead($chkDBSmartAttackRedArea) = $GUI_CHECKED Then
+    Switch _GUICtrlComboBox_GetCurSel($cmbDBDeploy)
+		Case $eSmartSave, $eMultiFinger
+			GUICtrlSetState($chkDBSmartAttackRedArea, $GUI_UNCHECKED)
+			GUICtrlSetState($chkDBSmartAttackRedArea, $GUI_HIDE)			
+			GUICtrlSetState($lblDBMultiFinger, $GUI_SHOW)
+			GUICtrlSetState($cmbDBMultiFinger, $GUI_SHOW)
+		Case Else
+			GUICtrlSetState($lblDBMultiFinger, $GUI_HIDE)
+			GUICtrlSetState($cmbDBMultiFinger, $GUI_HIDE)
+			GUICtrlSetState($chkDBSmartAttackRedArea, $GUI_SHOW)
+	EndSwitch
+
+	If _GUICtrlComboBox_GetCurSel($cmbDBDeploy) <> $eMultiFinger Then
 		$iChkRedArea[$DB] = 1
-		For $i = $lblDBSmartDeploy To $picDBAttackNearDarkElixirDrill
+		
+		If _GUICtrlComboBox_GetCurSel($cmbDBDeploy) <> $eSmartSave Then
+			GUICtrlSetState($lblDBSmartDeploy, $GUI_SHOW)
+			GUICtrlSetState($cmbDBSmartDeploy, $GUI_SHOW)
+		Else
+			GUICtrlSetState($lblDBSmartDeploy, $GUI_HIDE)
+			GUICtrlSetState($cmbDBSmartDeploy, $GUI_HIDE)
+		EndIf
+				
+		For $i = $chkDbAttackNearGoldMine To $picDBAttackNearDarkElixirDrill
 			GUICtrlSetState($i, $GUI_SHOW)
 		Next
 	Else
-		$iChkRedArea[$DB] = 0
+		$iChkRedArea[$DB] = 0		
 		For $i = $lblDBSmartDeploy To $picDBAttackNearDarkElixirDrill
 			GUICtrlSetState($i, $GUI_HIDE)
 		Next
 	EndIf
 EndFunc   ;==>chkDBSmartAttackRedArea
 
+Func cmbDBMultiFinger()
+	$iMultiFingerStyle[$DB] = _GUICtrlComboBox_GetCurSel($cmbDBMultiFinger)
+EndFunc   ;==>cmbDBMultiFinger
+
 Func chkABSmartAttackRedArea()
+	chkDESideEB()
+	If _GUICtrlComboBox_GetCurSel($cmbABDeploy) = $eMilking Then
+		GUICtrlSetState($btnMilkingOptions, $GUI_SHOW)
+	ElseIf _GUICtrlComboBox_GetCurSel($cmbABDeploy) = $eCustomDeploy Then
+		GUICtrlSetState($btnMilkingOptions, $GUI_HIDE)
+		GUICtrlSetState($chkABSmartAttackRedArea, $GUI_UNCHECKED)
+		GUICtrlSetState($chkABSmartAttackRedArea, $GUI_HIDE)
+
+		For $i = 0 to $DEPLOY_MAX_WAVES - 1
+			GUICtrlSetState($ctrlDeploy[$i][1], $GUI_ENABLE)
+			GUICtrlSetState($ctrlDeploy[$i][2], $GUI_ENABLE)
+		Next
+	Else
+		GUICtrlSetState($btnMilkingOptions, $GUI_HIDE)
+  	    GUICtrlSetState($chkABSmartAttackRedArea, $GUI_SHOW)
+	EndIf
+
 	If GUICtrlRead($chkABSmartAttackRedArea) = $GUI_CHECKED Then
 		$iChkRedArea[$LB] = 1
 		For $i = $lblABSmartDeploy To $picABAttackNearDarkElixirDrill
 			GUICtrlSetState($i, $GUI_SHOW)
-		Next
-	Else
+		 Next
+     Else
 		$iChkRedArea[$LB] = 0
 		For $i = $lblABSmartDeploy To $picABAttackNearDarkElixirDrill
 			GUICtrlSetState($i, $GUI_HIDE)
-		Next
+		 Next
 	EndIf
-EndFunc   ;==>chkABSmartAttackRedArea
+EndFunc  ;==>chkABSmartAttackRedArea
 
 Func chkBalanceDR()
 	If GUICtrlRead($chkUseCCBalanced) = $GUI_CHECKED Then
@@ -84,19 +126,18 @@ EndFunc   ;==>chkABRandomSpeedAtk
 
 Func btnMilkingOptions()
 	OpenGUIMilk2()
-EndFunc
+EndFunc   ;==>btnMilkingOptions
 
 Func cmbABDeploy()
 	chkDESideEB()
-	If _GUICtrlComboBox_GetCurSel($cmbABDeploy) = 6 Then ; 6 it is milking attack strategy
+	If _GUICtrlComboBox_GetCurSel($cmbABDeploy) = $eMilking Then
 		GUICtrlSetState($btnMilkingOptions, $GUI_ENABLE)
 	Else
 		GUICtrlSetState($btnMilkingOptions, $GUI_DISABLE)
 	EndIf
-EndFunc
+EndFunc   ;==>chkABRandomSpeedAtk
 
 Func chkDBHeroWait()
-
 	If GUICtrlRead($chkDBKingWait) = $GUI_CHECKED Then
 		If GUICtrlRead($chkUpgradeKing) = $GUI_UNCHECKED Then
 			GUICtrlSetState($chkDBKingAttack, $GUI_CHECKED)
@@ -138,11 +179,9 @@ Func chkDBHeroWait()
 			GUICtrlSetState($chkDBWardenWait, BitOR($GUI_DISABLE, $GUI_UNCHECKED))
 		EndIf
 	EndIf
-
-EndFunc
+EndFunc   ;==>cmbABDeploy
 
 Func chkABHeroWait()
-
 	If GUICtrlRead($chkABKingWait) = $GUI_CHECKED Then
 		If GUICtrlRead($chkUpgradeKing) = $GUI_UNCHECKED Then
 			GUICtrlSetState($chkABKingAttack, $GUI_CHECKED)
@@ -184,5 +223,4 @@ Func chkABHeroWait()
 			GUICtrlSetState($chkABWardenWait, BitOR($GUI_DISABLE, $GUI_UNCHECKED))
 		EndIf
 	EndIf
-
-EndFunc
+EndFunc   ;==>chkABHeroWait

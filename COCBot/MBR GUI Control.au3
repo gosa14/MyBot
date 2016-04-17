@@ -50,10 +50,14 @@ AtkLogHead()
 #include "GUI\MBR GUI Control Tab Search.au3"
 #include "GUI\MBR GUI Control Tab Attack.au3"
 #include "GUI\MBR GUI Control Tab AttackCSV.au3"
+; Added by LunaEclipse
+#include "GUI\MBR GUI Control Tab Deploy.au3"
 #include "GUI\MBR GUI Control Tab Advanced.au3"
 #include "GUI\MBR GUI Control Tab EndBattle.au3"
 #include "GUI\MBR GUI Control Tab Donate.au3"
 #include "GUI\MBR GUI Control Tab Misc.au3"
+; Added by LunaEclipse
+#include "GUI\MBR GUI Control Tab MOD.au3"
 #include "GUI\MBR GUI Control Tab Upgrade.au3"
 #include "GUI\MBR GUI Control Tab Notify.au3"
 #include "GUI\MBR GUI Control Tab Expert.au3"

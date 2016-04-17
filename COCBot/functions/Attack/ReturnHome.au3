@@ -6,52 +6,52 @@
 ;                  $GoldChangeCheck     - [optional] an unknown value. Default is True.
 ; Return values .: None
 ; Author ........:
-; Modified ......: KnowJack (Jun/Aug2015), MonkeyHunter (2106-01)
+; Modified ......: KnowJack (Jun/Aug2015), MonkeyHunter (2106-01), LunaEclipse(January, 2016)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
 ; Example .......: No
 ; ===============================================================================================================================
-Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
+Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ; Return main screen
 	If $DebugSetLog = 1 Then Setlog("ReturnHome function... (from matchmode=" & $iMatchMode & " - " & $sModeText[$iMatchMode] & ")", $COLOR_PURPLE)
 	Local $counter = 0
 	Local $hBitmap_Scaled
 	Local $i
 
-	If $DisableOtherEBO And $iMatchMode = $LB And $iChkDeploySettings[$LB] = 4 And $DESideEB And ($dropQueen Or $dropKing) Then
+	; Modified by LunaEclipse
+	If $DisableOtherEBO = 1 And $iMatchMode = $LB And $iChkDeploySettings[$LB] = $eCustomDeploy And Number($DESideEB) = 1 And ($dropQueen Or $dropKing) Then
 		SaveandDisableEBO()
 		SetLog("Disabling Normal End Battle Options", $COLOR_GREEN)
 	EndIf
 	If $GoldChangeCheck = True Then
-
-
-		If Not (IsReturnHomeBattlePage(True, False)) Then ; if already in return home battle page do not wait and try to activate Hero Ability and close battle
+		If Not IsReturnHomeBattlePage(True, False) Then ; if already in return home battle page do not wait and try to activate Hero Ability and close battle
 			SetLog("Checking if the battle has finished", $COLOR_BLUE)
 			While GoldElixirChangeEBO()
-				If _Sleep($iDelayReturnHome1) Then Return
+				If _SleepAttack($iDelayReturnHome1) Then Return
 			WEnd
-			;If Heroes were not activated: Hero Ability activation before End of Battle to restore health
+			
+			; If Heroes were not activated: Hero Ability activation before End of Battle to restore health
 			If ($checkKPower = True Or $checkQPower = True) And $iActivateKQCondition = "Auto" Then
-				;_CaptureRegion()
+				; _CaptureRegion()
 				If _ColorCheck(_GetPixelColor($aRtnHomeCheck1[0], $aRtnHomeCheck1[1], True), Hex($aRtnHomeCheck1[2], 6), $aRtnHomeCheck1[3]) = False And _ColorCheck(_GetPixelColor($aRtnHomeCheck2[0], $aRtnHomeCheck2[1], True), Hex($aRtnHomeCheck2[2], 6), $aRtnHomeCheck2[3]) = False Then ; If not already at Return Homescreen
 					If $checkKPower = True Then
 						SetLog("Activating King's power to restore some health before EndBattle", $COLOR_BLUE)
-						If IsAttackPage() Then SelectDropTroop($King) ;If King was not activated: Boost King before EndBattle to restore some health
+						If IsAttackPage() Then SelectDropTroop($King) ; If King was not activated: Boost King before EndBattle to restore some health
 					EndIf
 					If $checkQPower = True Then
 						SetLog("Activating Queen's power to restore some health before EndBattle", $COLOR_BLUE)
-						If IsAttackPage() Then SelectDropTroop($Queen) ;If Queen was not activated: Boost Queen before EndBattle to restore some health
+						If IsAttackPage() Then SelectDropTroop($Queen) ; If Queen was not activated: Boost Queen before EndBattle to restore some health
 					EndIf
 				EndIf
 			EndIf
 		Else
 			If $DebugSetLog = 1 Then Setlog("Battle already over", $COLOR_PURPLE)
 		EndIf
-
 	EndIf
 
-	If $DisableOtherEBO And $iMatchMode = $LB And $iChkDeploySettings[$LB] = 4 And $DESideEB And ($dropQueen Or $dropKing) Then
+	; Modified by LunaEclipse
+	If $DisableOtherEBO And $iMatchMode = $LB And $iChkDeploySettings[$LB] = $eCustomDeploy And Number($DESideEB) = 1 And ($dropQueen Or $dropKing) Then
 		RevertEBO()
 	EndIf
 
@@ -59,50 +59,48 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 	$checkQPower = False
 	$checkWPower = False
 
-	If $iMatchMode = $TS And $icmbTroopComp <> 8 Then $FirstStart = True ;reset barracks upon return when TH sniping w/custom army
+	If $iMatchMode = $TS And $icmbTroopComp <> 8 Then $FirstStart = True ; reset barracks upon return when TH sniping w/custom army
 
 	SetLog("Returning Home", $COLOR_BLUE)
 	If $RunState = False Then Return
 
 	checkAndroidTimeLag(False)
 
-	If Not (IsReturnHomeBattlePage(True, False)) Then
+	If Not IsReturnHomeBattlePage(True, False) Then
 		; ---- CLICK SURRENDER BUTTON ----
 		$i = 0 ; Reset Loop counter
 		While 1
 			If _CheckPixel($aSurrenderButton, $bCapturePixel) Then
 				If IsAttackPage() Then
 					ClickP($aSurrenderButton, 1, 0, "#0099") ;Click Surrender
-					If _Sleep($iDelayReturnHome2) Then Return ; short wait for confirm button to appear
+					If _SleepAttack($iDelayReturnHome2) Then Return ; short wait for confirm button to appear
 					If IsEndBattlePage(False) Then
 						ClickOkay("SurrenderOkay") ; Click Okay to Confirm surrender
 						ExitLoop
-					 EndIf
-			    Else
-				    $i += 1
+					EndIf
 				EndIf
 			Else
 				$i += 1
 			EndIf
 			If $i > 5 Then ExitLoop ; if end battle or surrender button are not found in 5*(200+200)ms or 2 seconds, then give up.
-			If _Sleep($iDelayReturnHome5) Then Return
+			If _SleepAttack($iDelayReturnHome5) Then Return
 		WEnd
 	Else
 		If $DebugSetLog = 1 Then Setlog("Battle already over.", $COLOR_PURPLE)
 	EndIf
 
-	If _Sleep($iDelayReturnHome2) Then Return ; short wait for return
+	If _SleepAttack($iDelayReturnHome2) Then Return ; short wait for return
 
 	TrayTip($sBotTitle, "", BitOR($TIP_ICONASTERISK, $TIP_NOSOUND)) ; clear village search match found message
 
 	If $GoldChangeCheck = True Then
 		$counter = 0
 		While _ColorCheck(_GetPixelColor($aRtnHomeCheck1[0], $aRtnHomeCheck1[1], True), Hex($aRtnHomeCheck1[2], 6), $aRtnHomeCheck1[3]) = False And _ColorCheck(_GetPixelColor($aRtnHomeCheck2[0], $aRtnHomeCheck2[1], True), Hex($aRtnHomeCheck2[2], 6), $aRtnHomeCheck2[3]) = False ; test for Return Home Button
-			If _Sleep($iDelayReturnHome2) Then ExitLoop
+			If _SleepAttack($iDelayReturnHome2) Then ExitLoop
 			$counter += 1
 			If $counter > 40 Then ExitLoop
 		WEnd
-		If _Sleep($iDelayReturnHome3) Then Return ; wait for all report details
+		If _SleepAttack($iDelayReturnHome3) Then Return ; wait for all report details
 		_CaptureRegion(0, 0, $DEFAULT_WIDTH, $DEFAULT_HEIGHT - 45)
 		AttackReport()
 	EndIf
@@ -137,21 +135,24 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 			$i += 1
 		EndIf
 		If $i > 10 Then ExitLoop ; if end battle window is not found in 10*200mms or 2 seconds, then give up.
-		If _Sleep($iDelayReturnHome5) Then Return
+		If _SleepAttack($iDelayReturnHome5) Then Return
 	WEnd
-	If _Sleep($iDelayReturnHome2) Then Return ; short wait for screen to close
+	If _SleepAttack($iDelayReturnHome2) Then Return ; short wait for screen to close
 
 	$counter = 0
 	While 1
-		If _Sleep($iDelayReturnHome4) Then Return
+		If _SleepAttack($iDelayReturnHome4) Then Return
 		If StarBonus() = True Then Setlog("Star Bonus window closed chief!", $COLOR_BLUE)  ; Check for Star Bonus window to fill treasury (2016-01) update
 		If IsMainPage() Then
 			_GUICtrlEdit_SetText($txtLog, _PadStringCenter(" BOT LOG ", 71, "="))
 			_GUICtrlRichEdit_SetFont($txtLog, 6, "Lucida Console")
 			_GUICtrlRichEdit_AppendTextColor($txtLog, "" & @CRLF, _ColorConvert($Color_Black))
+			$dontExitMessageDisplayed = False
 			Return
 		EndIf
+
 		$counter += 1
+
 		If $counter >= 50 Or isProblemAffect(True) Then
 			SetLog("Cannot return home.", $COLOR_RED)
 			checkMainScreen()
@@ -159,5 +160,3 @@ Func ReturnHome($TakeSS = 1, $GoldChangeCheck = True) ;Return main screen
 		EndIf
 	WEnd
 EndFunc   ;==>ReturnHome
-
-

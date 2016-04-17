@@ -255,3 +255,31 @@
 #include "functions\Village\UpgradeHeroes.au3"
 #include "functions\Village\ClanLevel.au3"
 #include "functions\Village\StarBonus.au3"
+
+; Attack files - Added by LunaEclipse
+#include "functions\Attack\attackFunctions.au3"
+#include "functions\Attack\unitInfo.au3"
+
+; Deployment files - Added by LunaEclipse
+#include "functions\Attack\Deployment\troopDeployment.au3"
+#include "functions\Attack\Deployment\deployArray.au3"
+
+; Attack Profile Vectors files - Added by LunaEclipse
+#include "functions\Attack\Attack Profiles\Vectors\fourFingerStandard.au3"
+#include "functions\Attack\Attack Profiles\Vectors\fourFingerSpiralLeft.au3"
+#include "functions\Attack\Attack Profiles\Vectors\fourFingerSpiralRight.au3"
+
+#include "functions\Attack\Attack Profiles\Vectors\eightFingerPinWheelLeft.au3"
+#include "functions\Attack\Attack Profiles\Vectors\eightFingerPinWheelRight.au3"
+#include "functions\Attack\Attack Profiles\Vectors\eightFingerBlossom.au3"
+#include "functions\Attack\Attack Profiles\Vectors\eightFingerImplosion.au3"
+
+#include "functions\Attack\Attack Profiles\Vectors\customDeploy.au3"
+
+; Attack Profile files - Added by LunaEclipse
+#include "functions\Attack\Attack Profiles\standardAttack.au3"
+#include "functions\Attack\Attack Profiles\fourFinger.au3"
+#include "functions\Attack\Attack Profiles\eightFinger.au3"
+#include "functions\Attack\Attack Profiles\multiFinger.au3"
+#include "functions\Attack\Attack Profiles\saveTroopsForCollectors.au3"
+#include "functions\Attack\Attack Profiles\customDeploy.au3"

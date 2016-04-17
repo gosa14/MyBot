@@ -40,10 +40,14 @@ GUICtrlSetOnEvent(-1, "")
 #include "GUI\MBR GUI Design Tab Search.au3"
 #include "GUI\MBR GUI Design Tab Attack.au3"
 #include "GUI\MBR GUI Design Tab AttackCSV.au3"
+; Added by LunaEclipse
+#include "GUI\MBR GUI Design Tab Deploy.au3"
 #include "GUI\MBR GUI Design Tab Advanced.au3"
 #include "GUI\MBR GUI Design Tab EndBattle.au3"
 #include "GUI\MBR GUI Design Tab Donate.au3"
 #include "GUI\MBR GUI Design Tab Misc.au3"
+; Added by LunaEclipse
+#include "GUI\MBR GUI Design Tab MOD.au3"
 #include "GUI\MBR GUI Design Tab Upgrade.au3"
 #include "GUI\MBR GUI Design Tab Notify.au3"
 #include "GUI\MBR GUI Design Tab Expert.au3"

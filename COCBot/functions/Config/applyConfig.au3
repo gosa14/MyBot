@@ -1716,6 +1716,36 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	EndIf
 	chkUseAttackABCSV()
 
+	; Multi Finger Attack Style Settings - Added by LunaEclipse
+	_GUICtrlComboBox_SetCurSel($cmbDBMultiFinger, $iMultiFingerStyle[$DB])
+
+	; Save Troops for Collector Settings - Added by LunaEclipse
+	If $useFFBarchST = 1 Then
+		GUICtrlSetState($chkChangeFF, $GUI_CHECKED)
+	Else
+		GUICtrlSetState($chkChangeFF, $GUI_UNCHECKED)
+	EndIf
+	GUICtrlSetData($txtPercentCollectors, $percentCollectors)
+	GUICtrlSetData($txtDistance, $redlineDistance)
+
+	; Misc Battle Settings - Added by LunaEclipse
+	If $AndroidAdbClicksEnabled = 1 Then
+		GUICtrlSetState($chkFastADBClicks, $GUI_CHECKED)
+		$AndroidAdbClicksEnabled = True
+	Else
+		GUICtrlSetState($chkFastADBClicks, $GUI_UNCHECKED)
+		$AndroidAdbClicksEnabled = False
+	EndIf
+
+	; Custom Deployment Settings - Added by LunaEclipse
+	GUICtrlSetData($txtTownHall, $valueTownHall)
+	GUICtrlSetData($txtDEStorage, $valueDEStorage)
+	GUICtrlSetData($txtGoldStorage, $valueGoldStorage)
+	GUICtrlSetData($txtElixirStorage, $valueElixirStorage)
+	GUICtrlSetData($txtGoldMine, $valueGoldMine)
+	GUICtrlSetData($txtElixirCollector, $valueElixirCollector)
+	GUICtrlSetData($txtDEDrill, $valueDEDrill)
+	deployArrayToUISettings($deployValues)
 
 	; Reenabling window redraw
 	If $bRedrawAtExit Then SetRedrawBotWindow(True)

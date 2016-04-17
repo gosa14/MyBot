@@ -10,11 +10,16 @@
 ; Example .......: No
 ; ===============================================================================================================================
 
-
 #RequireAdmin
 #AutoIt3Wrapper_UseX64=7n
 #include <WindowsConstants.au3>
 #include <WinAPI.au3>
+
+; Allows the MOD to receive GUI Events - Added by LunaEclipse
+Opt("GUIOnEventMode", 1)
+
+; Custom Event Handler file - Must be here to ensure it is loaded before the GUI is created - Added by LunaEclipse
+#include "COCBot\functions\Other\onEventFunc.au3"
 
 #pragma compile(Icon, "Images\MyBot.ico")
 #pragma compile(FileDescription, Clash of Clans Bot - A Free Clash of Clans bot - https://mybot.run)
@@ -454,7 +459,7 @@ Func Attack() ;Selects which algorithm
 	SetLog(" ====== Start Attack ====== ", $COLOR_GREEN)
 	If  ($iMatchMode = $DB and $ichkUseAttackDBCSV = 1) or ($iMatchMode = $LB and $ichkUseAttackABCSV = 1) Then
 		Algorithm_AttackCSV()
-	Elseif $iMatchMode= $LB and  $iChkDeploySettings[$LB] = 6 Then
+	Elseif $iMatchMode= $LB and  $iChkDeploySettings[$LB] = $eMilking Then
 	    Alogrithm_MilkingAttack()
 		; check if can snipe external TH
 		If $OptTrophyMode = 1 Then ;Enables Combo Mode Settings
