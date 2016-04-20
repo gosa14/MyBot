@@ -785,7 +785,6 @@ Func Train()
 							If _Sleep($iDelayTrain1) Then Return
 							If $debugSetlog = 1 Then SetLog("Call Func TrainIt Arch", $COLOR_PURPLE)
 							If Not (IsTrainPage()) Then Return ;exit from train
-							TrainIt($eArch, 20)
 							$BarrackFull[$brrNum - 1] = False
 							$BarrackStatus[$brrNum - 1] = True
 							If $brrNum >= $numBarracksAvaiables Then ExitLoop ; make sure no more infiniti loop
@@ -1084,7 +1083,6 @@ Func Train()
 								If _Sleep($iDelayTrain1) Then ExitLoop
 								If $debugSetlog = 1 Then SetLog("Call Func TrainIt for Mini", $COLOR_PURPLE)
 								If Not (IsTrainPage()) Then Return ;exit from train
-								TrainIt($eMini, 10)
 								$BarrackDarkFull[$brrDarkNum - 1] = False
 								$BarrackDarkStatus[$brrDarkNum - 1] = True
 								If $i >= 2 Then ExitLoop ; Make sure no more infiniti loop
